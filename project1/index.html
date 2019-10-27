@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>OS project1 - realtime scheduling</title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<style>
+.top-intro { margin-top:30px; margin-bottom:0; }
+.task-list-box { margin-top:30px; }
+.task-list-box .random-group { margin-bottom:0; }
+.task-list-box .task-list { height:100px !important; }
+.controller { padding:20px; text-align:center; }
+.controller .server { width:200px; display:inline-block; }
+.result table { table-layout:fixed }
+.result table td { text-align:center; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron top-intro">
+			<h2>OS Project1 - Realtime Scheduling</h2>
+			<p>
+				2017104005 컴퓨터공학과 오윤석<br>
+				랜덤 또는 Task를 입력해 실행해주세요.
+			</p>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 task-list-box">
+				<h4>주기적 Task</h4>
+				<div class="form-group random-group">
+					<input type="checkbox" id="is-periodic-random">
+					<label id="is-periodic-random">랜덤 적용</label>
+				</div>
+				<textarea id="periodic-list" class="form-control task-list">10 2
+15 3
+30 4</textarea>
+				<p>
+					<strong>주기 계산시간 \n 주기 계산시간</strong> 형태로 입력해주세요.<br>
+					이름은 주기로 정렬된 후 순서대로 P0 ~ Pn으로 부여됩니다.
+				</p>
+			</div>
+			<div class="col-md-6 task-list-box">
+				<h4>비주기적 Task</h4>
+				<div class="form-group random-group">
+					<input type="checkbox" id="is-aperiodic-random">
+					<label id="is-aperiodic-random">랜덤 적용</label>
+				</div>
+				<textarea id="aperiodic-list" class="form-control task-list">5 1
+12 1
+15 2</textarea>
+				<p>
+					<strong>도착시각 계산시간 \n 도착시각 계산시간</strong> 형태로 입력해주세요.<br>
+					이름은 도착시간으로 정렬된 후 순서대로 AP0 ~ APn으로 부여됩니다.
+				</p>
+			</div>
+		</div>
+
+		<div class="controller">
+			<div class="row">
+				<div class="col-md-6 form-group text-right">
+					<label for="server">Server 주기</label><br>
+					<input type="number" class="form-control server" id="server-t" value="5">
+				</div>
+				<div class="col-md-6 form-group text-left">
+					<label for="server">Server 계산시간</label><br>
+					<input type="number" class="form-control server" id="server-c" value="1">
+				</div>
+			</div>
+			<div class="buttons">
+				<button class="btn btn-primary" id="btn-polling">Polling 계산</button>
+				<button class="btn btn-success" id="btn-deferrable">Deferrable 계산</button>
+			</div>
+		</div>
+
+		<div class="result">
+			<h4>결과</h4>
+			<table class="table table-bordered">
+				<tbody>
+					<tr class="process"></tr>
+					<tr class="time"></tr>
+				</tbody>
+			</table>
+			<p>
+				비주기적 Task 평균 대기시간 : <span id="avg-aperiodic-waiting-time"></span>
+			</p>
+		</div>
+	</div>
+</body>
+</html>
