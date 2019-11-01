@@ -1,0 +1,8 @@
+.top-intro { margin-top:30px; margin-bottom:0; }
+.task-list-box { margin-top:30px; }
+.task-list-box .random-group { margin-bottom:0; }
+.task-list-box .task-list { height:100px !important; }
+.controller { padding:20px; text-align:center; }
+.controller .server { width:200px; display:inline-block; }
+.result table { table-layout:fixed }
+.result table td { text-align:center; font-size:10px; }
