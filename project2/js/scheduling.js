@@ -5,45 +5,81 @@ $(function() {
 		var periodic = new Array();
 		var aperiodic = new Array();
 
-		if(periodicRandom) {
-
-		} else {
-			var input = $("#periodic-list").val();
-			var rows = input.split("\n");
-			for(i in rows) {
-				var row = rows[i].trim().split(" ");
-
-				if(row.length != 2)
-					return null;
-
-				periodic.push({
-					t:parseInt(row[0]),
-					c:parseInt(row[1])
-				});
-			}
-		}
-
-		if(aperiodicRandom) {
-
-		} else {
-			var input = $("#aperiodic-list").val();
-			var rows = input.split("\n");
-			for(i in rows) {
-				var row = rows[i].trim().split(" ");
-
-				if(row.length != 2)
-					return null;
-
-				aperiodic.push({
-					a:parseInt(row[0]),
-					c:parseInt(row[1])
-				});
-			}
-		}
-
 		var server = {
 			t:parseInt($("#server-t").val()),
 			c:parseInt($("#server-c").val())
+		}
+
+		if(periodicRandom) {
+			var randomCount = 3 + parseInt(Math.random() * 3);
+			var periodicTmp = new Array();
+			for(var i=0; i<randomCount; i++) {
+				var c = 1 + parseInt(Math.random() * 7);
+				var t = 60;
+				if(Math.random() > 0.5) {
+					var tcGCD = gcd(60, c);
+					t /= tcGCD;
+					c /= tcGCD;
+				}
+
+				periodicTmp.push({
+					t:t,
+					c:c
+				});
+			}
+			showPeriodic(periodicTmp);
+		}
+
+		var periodicInput = $("#periodic-list").val().trim();
+		var rows = periodicInput.split("\n");
+
+		if(rows.length < 1 || rows.length > 100) {
+			alert("주기적 task의 갯수는 1~100개만 가능합니다.");
+			return null;
+		}
+
+		for(var i in rows) {
+			var row = rows[i].trim().split(" ");
+
+			if(row.length != 2)
+				return null;
+
+			periodic.push({
+				t:parseInt(row[0]),
+				c:parseInt(row[1])
+			});
+		}
+
+		if(aperiodicRandom) {
+			var aperiodicTmp = new Array();
+			var hyperPeriod = getHyperPeriod(periodic, server);
+			var randomCount = 1 + parseInt(Math.random() * parseInt(hyperPeriod/server.t));
+			for(var i=0; i<randomCount; i++) {
+				var a = 1 + parseInt(Math.random() * parseInt(hyperPeriod/3));
+				var c = 1;
+				if(Math.random() > 0.8)
+					c += 1
+				
+				aperiodicTmp.push({
+					a:a,
+					c:c
+				});
+			}
+			showAperiodic(aperiodicTmp);
+		}
+
+		var aperiodicInput = $("#aperiodic-list").val().trim();
+		var rows = aperiodicInput.split("\n");
+		for(var i in rows) {
+			var row = rows[i].trim().split(" ");
+
+			if(row.length != 2)
+				return null;
+
+			aperiodic.push({
+				a:parseInt(row[0]),
+				c:parseInt(row[1])
+			});
 		}
 
 		return {
@@ -59,7 +95,7 @@ $(function() {
 
 		utilization = server.c / server.t;
 
-		for(i in periodic) {
+		for(var i in periodic) {
 			if(periodic[i].t <= 0)
 				return false;
 			utilization += periodic[i].c / periodic[i].t;
@@ -91,11 +127,26 @@ $(function() {
 		return input_array[l - 1];
 	}
 
+	function gcd(value1, value2) {
+		if (typeof value1 !== "number" || typeof value2 !== "number")
+			return;
+
+		var num = value1 > value2 ? value1 : value2;
+		var max;
+		
+		for (let i = 1; i <= num; i++) {
+			if (value1 % i === 0 && value2 % i === 0)
+				max = i;
+		}
+		
+		return max;
+	}
+
 	function getHyperPeriod(periodic, server) {
 		periods = new Array();
 		periods.push(server.t);
 		
-		for(i in periodic) {
+		for(var i in periodic) {
 			periods.push(periodic[i].t);
 		}
 
@@ -107,7 +158,7 @@ $(function() {
 			return periodic;
 
 		for(var i=1; i<periodic.length; i++) {
-			for(var j=i; j<periodic.length; j++) {
+			for(var j=1; j<periodic.length; j++) {
 				if(periodic[j-1].t > periodic[j].t) {
 					var tmp = periodic[j-1];
 					periodic[j-1] = periodic[j];
@@ -115,6 +166,8 @@ $(function() {
 				}
 			}
 		}
+
+		showPeriodic(periodic);
 
 		return periodic
 	}
@@ -124,7 +177,7 @@ $(function() {
 			return aperiodic;
 
 		for(var i=1; i<aperiodic.length; i++) {
-			for(var j=i; j<aperiodic.length; j++) {
+			for(var j=1; j<aperiodic.length; j++) {
 				if(aperiodic[j-1].a > aperiodic[j].a) {
 					var tmp = aperiodic[j-1];
 					aperiodic[j-1] = aperiodic[j];
@@ -132,6 +185,8 @@ $(function() {
 				}
 			}
 		}
+
+		showAperiodic(aperiodic);
 
 		return aperiodic
 	}
@@ -145,12 +200,12 @@ $(function() {
 		var serverRemain = 0;
 		var tasks = new Array();
 
-		for(i in aperiodic) {
+		for(var i in aperiodic) {
 			aperiodic[i].remain = aperiodic[i].c;
 		}
 
 		for(t=0; t<hyperPeriod; t++) {
-			for(i in periodic) {
+			for(var i in periodic) {
 				if(t % periodic[i].t == 0) {
 					periodic[i].remain = periodic[i].c;
 				}
@@ -163,7 +218,7 @@ $(function() {
 			
 			if(usingTask == -2) {
 				var continueTask = false;
-				for(j in aperiodic) {
+				for(var j in aperiodic) {
 					if(t >= aperiodic[j].a && aperiodic[j].remain > 0) {
 						if(--aperiodic[j].remain == 0)
 							aperiodic[j].finished = t + 1;
@@ -178,7 +233,7 @@ $(function() {
 					continue;
 			}
 			
-			for(i in periodic) {
+			for(var i in periodic) {
 				if(periodic[i].remain > 0) {
 					usingTask = parseInt(i)
 					break;
@@ -194,7 +249,7 @@ $(function() {
 			}
 		}
 
-		for(i in aperiodic) {
+		for(var i in aperiodic) {
 			if(aperiodic[i].finished == undefined) {
 				avgAperiodicWaitingTime = '모든 비주기적 Task가 완료되지 않음';
 				break;
@@ -221,12 +276,12 @@ $(function() {
 		var serverRemain = 0;
 		var tasks = new Array();
 
-		for(i in aperiodic) {
+		for(var i in aperiodic) {
 			aperiodic[i].remain = aperiodic[i].c;
 		}
 
 		for(t=0; t<hyperPeriod; t++) {
-			for(i in periodic) {
+			for(var i in periodic) {
 				if(t % periodic[i].t == 0) {
 					periodic[i].remain = periodic[i].c;
 				}
@@ -238,7 +293,7 @@ $(function() {
 			
 			if(serverRemain > 0) {
 				var continueTask = false;
-				for(j in aperiodic) {
+				for(var j in aperiodic) {
 					if(t >= aperiodic[j].a && aperiodic[j].remain > 0) {
 						if(--aperiodic[j].remain == 0)
 							aperiodic[j].finished = t + 1;
@@ -252,7 +307,7 @@ $(function() {
 					continue;
 			}
 			
-			for(i in periodic) {
+			for(var i in periodic) {
 				if(periodic[i].remain > 0) {
 					usingTask = parseInt(i)
 					break;
@@ -268,7 +323,7 @@ $(function() {
 			}
 		}
 
-		for(i in aperiodic) {
+		for(var i in aperiodic) {
 			if(aperiodic[i].finished == undefined) {
 				avgAperiodicWaitingTime = '모든 비주기적 Task가 완료되지 않음';
 				break;
@@ -286,6 +341,22 @@ $(function() {
 		};
 	}
 
+	function showPeriodic(periodic) {
+		var periodicText = '';
+		for(var i in periodic) {
+			periodicText += (periodic[i].t + ' ' + periodic[i].c + '\n');
+		}
+		$("#periodic-list").val(periodicText.trim());
+	}
+
+	function showAperiodic(aperiodic) {
+		var aperiodicText = '';
+		for(var i in aperiodic) {
+			aperiodicText += (aperiodic[i].a + ' ' + aperiodic[i].c + '\n');
+		}
+		$("#aperiodic-list").val(aperiodicText.trim());
+	}
+
 	function showTable(tasks) {
 		$("table .process td").remove();
 		$("table .time td").remove();
@@ -294,7 +365,7 @@ $(function() {
 		var remainTask = '';
 		var remainTaskSize = 0;
 
-		for(i in tasks) {
+		for(var i in tasks) {
 			if(tasks[i] == remainTask)
 				remainTaskSize++;
 			else {
@@ -315,7 +386,7 @@ $(function() {
 			colspan:remainTaskSize
 		});
 
-		for(i in colspanTasks) {
+		for(var i in colspanTasks) {
 			$("table .process").append("<td colspan='" + colspanTasks[i].colspan + "'>" + colspanTasks[i].task + "</td>");
 		}
 	}
