@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>OS project4 - Memory Management</title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/style.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/memory.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron top-intro">
+			<h2>OS Project4 - Memory Management</h2>
+			<p>
+				2017104005 컴퓨터공학과 오윤석<br>
+				전체 메모리 양과 메모리 요청을 입력해주세요.<br>
+				<span style="text-decoration:underline">한 번에 한 요청에 대한 결과</span>만 나옵니다. <span style="text-decoration:underline">다음결과 버튼을 클릭해서 다음 요청을 실행</span>해주세요.
+			</p>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 input-box">
+				<p>
+					<h4>전체 메모리</h4>
+					<div class="input-group">
+						<input type="number" class="form-control" id="total-memory" value="256">
+						<div class="input-group-addon">K</div>
+					</div>
+				</p>
+				<p>
+					<h4>메모리 요청 입력</h4>
+					<textarea id="input" class="form-control">1 64
+2 64
+3 32
+4 16
+5 64
+1 0
+3 0
+6 80
+6 0</textarea>
+					<p>
+						<strong>프로세스ID 요청량 \n 프로세스ID 요청량</strong> 형태로 입력해주세요.<br>
+						요청량이 0인 경우 해당 프로세스를 release합니다.<br>
+						첫 줄부터 Time0이 할당되고 이후에 순서대로 할당됩니다.
+					</p>
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-primary" id="btn-result">계산</button>
+			</div>
+		</div>
+
+		<div class="result">
+			<h4>결과</h4>
+			<ul></ul>
+			<table class="table table-bordered"></table>
+			<div class="text-right" id="result-buttons">
+				<button class="btn btn-primary" id="btn-next">다음요청 &gt;</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

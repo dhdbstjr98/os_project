@@ -1,0 +1,5 @@
+.top-intro { margin-top:30px; margin-bottom:0; }
+.input-box { margin-top:30px; }
+.input-box textarea { height:100px !important; }
+.result { margin-top:30px; padding-bottom:30px; }
+#result-buttons { display:none; }
