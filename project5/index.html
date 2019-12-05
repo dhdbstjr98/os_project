@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>OS project5 - Virtual Memory</title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/style.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/virtual-memory.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron top-intro">
+			<h2>OS Project5 - Virtual Memory</h2>
+			<p>
+				2017104005 컴퓨터공학과 오윤석<br>
+				프레임 사이즈와 Reference String을 입력해주세요.<br>
+				<span style="text-decoration:underline">한 번에 한 요청에 대한 결과</span>만 나옵니다. <span style="text-decoration:underline">다음결과 버튼을 클릭해서 다음 요청을 실행</span>해주세요.
+			</p>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 input-box">
+				<p>
+					<h4>프레임 사이즈</h4>
+					<div class="input-group">
+						<input type="number" class="form-control" id="frame-size" value="10">
+					</div>
+				</p>
+				<p>
+					<h4>Reference String</h4>
+					<textarea id="input" class="form-control">1 9 4 2 1 2 3 5 6 9 10 2 3 4 12 11 14 16 9 8 4 5 7 5 2 1 7 10 9 8 11 12 13 1 2 1 9</textarea>
+					<p>
+						<strong>띄어쓰기로 구분</strong>합니다.<br>
+						첫 줄부터 Time0이 할당되고 이후에 순서대로 할당됩니다.
+					</p>
+				</p>
+				<p>
+					<label>
+						<input type="checkbox" id="skip">
+						과정 생략 (체크시 최종 결과만 나옵니다.)
+					</label>
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-primary" id="btn-fifo">FIFO 계산</button>
+				<button class="btn btn-primary" id="btn-lru">LRU 계산</button>
+				<button class="btn btn-primary" id="btn-optimal">Optimal 계산</button>
+			</div>
+		</div>
+
+		<div class="result">
+			<h4>결과</h4>
+			<ul></ul>
+			<table class="table table-bordered"></table>
+			<div class="text-right" id="result-buttons">
+				<button class="btn btn-primary" id="btn-next">다음요청 &gt;</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
