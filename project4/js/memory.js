@@ -69,9 +69,9 @@ $(function() {
 		var input = inputs[currentTime];
 
 		if(input.size == 0)
-			showResultText("요청 : Process" + input.process + " Free");
+			showResultText("[Time " + currentTime + "] 요청 : Process" + input.process + " Free");
 		else
-			showResultText("요청 : Process" + input.process + " - " + input.size + "K");
+			showResultText("[Time " + currentTime + "] 요청 : Process" + input.process + " - " + input.size + "K");
 		
 		// release
 		for(var i in memory) {
@@ -110,6 +110,7 @@ $(function() {
 			return memory[bestFitPosition];
 		} else {
 			// compaction
+			showResultText("Compaction 수행 시작 : 빈공간 채워넣기로 시도중...");
 			var firstPadding = 0;
 			var lastPadding = 0;
 			if(memory[0].process === null)
@@ -145,10 +146,10 @@ $(function() {
 				return;
 			} else if(blankCount == 1) {
 				// 빈공간 채워넣기로 compaction 완료한 경우
-				showResultText("Compaction 수행 완료 : 빈공간 채워넣기로 수행, 재요청...");
+				showResultText("Compaction 수행 완료 : 빈공간 채워넣기로 수행 완료, 재요청...");
 				calculateBestFit(total, inputs);
 			} else {
-				showResultText("Compaction 수행 완료 : 브루트포스 수행, 재요청...");
+				showResultText("Compaction 수행 완료 : 빈공간 채워넣기로 수행 실패하여 브루트포스로 수행함, 재요청...");
 				newMemory = [];
 				newMemoryStart = 0;
 				for(var i in memory) {
